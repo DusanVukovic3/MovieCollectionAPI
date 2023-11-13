@@ -1,0 +1,30 @@
+# Use an official Node runtime as a base image
+FROM node:20.9.0-alpine AS build
+
+# Set the working directory (adjust if your project has a different structure)
+WORKDIR /app
+
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install --legacy-peer-deps
+
+# Copy the application files to the working directory
+COPY . .
+
+# Build the Angular app (adjust build command based on your project)
+RUN npm run build --prod
+
+# Use Nginx as a lightweight web server
+FROM nginx:alpine
+
+# Copy the built Angular app to the Nginx public directory
+# (adjust paths based on your Angular project structure)
+COPY --from=build /app/dist/* /usr/share/nginx/html/
+
+# Expose port 80
+EXPOSE 80
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
