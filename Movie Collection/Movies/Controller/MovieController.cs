@@ -25,7 +25,7 @@ namespace Movie_Collection.Movies.Controller
         [HttpGet]      
         public IActionResult GetAll()
         {
-            return Ok(_iMovieService.GetAll());
+            return Ok(_iMovieService.GetAll()); //Works
         }
 
 
